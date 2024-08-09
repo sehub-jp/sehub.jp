@@ -1,25 +1,17 @@
-'use client';
-
+'use client'
 import { useEffect, useState } from "react";
 
 export default function WhoAmI() {
-  const [userInfo, setUserInfo] = useState({});
-
+  const [ip, setIP] = useState('');
   useEffect(() => {
-    const userAgent = navigator.userAgent;
-    const lang = navigator.language;
-    const resolution = window.screen.width + '*' + window.screen.height;
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-    setUserInfo({
-      userAgent,
-      lang,
-      resolution,
-      timezone,
-    });
+    fetch('/api/getip')
+      .then(res => res.json())
+      .then(data => setIP(data.ip))
+      .catch(err => console.error('Error fetching IP:', err));
   }, []);
+  
 
   return (
-    <div>{JSON.stringify(userInfo)}</div>
+    <div>WhoAmI {ip}</div>
   );
 }
